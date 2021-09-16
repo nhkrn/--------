@@ -1,10 +1,10 @@
-
 var QX = 0;
 var QY = 0;
 var QM = 0;
 var QN = 0;
 var time = 0;
 let E = [];
+var W = 0;
 
 class Electron{
   constructor(){
@@ -27,26 +27,39 @@ class Depict{
     for(let i = 0;i < abs(E[k].q);i ++){
       let px = E[k].x;
       let py = E[k].y;
+      let pV = 0;
       let x = px + 3*sqrt(abs(E[k].q))*cos(i*pi*2/abs(E[k].q));
       let y = py+ 3*sqrt(abs(E[k].q))*sin(i*pi*2/(abs(E[k].q)));
+      let V = 0;
       for(let j = 0;j < 600;j ++){
+        V = 100000;
+        let u = 0;
         let ax = 0;
         let ay = 0;
         for(let s = 0;s < QN;s ++){
           let d = dist(x,y,E[s].x,E[s].y);
           ax += E[s].q*(x-E[s].x)/(d*d*d);
           ay += E[s].q*(y-E[s].y)/(d*d*d);
+          V += 150*E[s].q/d;
+          if(d < 20*sqrt(abs(E[s].q))){
+            u = 1;
+          }
         }
         let sita = atan(ay/ax);
         if(dist(x,y,px,py)> dist(x+a*cos(sita),y+a*sin(sita),px,py)){
           a = -a;
         }
         line(x,y,x+a*cos(sita),y+a*sin(sita));
-        let b = (time/5)%10;
-        if(j%10==b && E[k].q > 0)circle(x,y,6);
-        if(j%10==9-b && E[k].q < 0)circle(x,y,6);
+        let b = 1+(100000-time/15)%9;
+        if((pV%10-b)*(V%10-b) < 0 &&  (pV%10-1)*(V%10-1) >= 0 && u == 0){
+          circle(x,y,10);
+        }
+        if(b == 1 && (pV%10-1)*(V%10-1) < 0 && u == 0 && pV%10 < 5 && V%10 < 5){
+          circle(x,y,10)
+        }
         px = x;
         py = y;
+        pV = V;
         x += a*cos(sita);
         y += a*sin(sita);
         for(let s = 0;s < QN;s ++){
@@ -74,7 +87,7 @@ class Depict{
       strokeWeight(1)
     }
     fill(256)
-    rect(0,0,200,40)
+    rect(0,0,240,40)
 
 
   }
@@ -111,12 +124,14 @@ function setup() {
   E = [];
   QM = 0;
   QN = 0;
-  createCanvas(1000, 1000);
+  createCanvas(1500, 4000);
   depict = new Depict;
 }
 
 
 function draw() {
+  strokeWeight(3)
+  stroke(250,100,00)
   line(10,20,30,20);
   line(20,10,20,30);
   line(50,20,70,20);
@@ -130,6 +145,13 @@ function draw() {
   line(170,10,170,30);
   line(170,10,190,20);
   line(190,20,170,30);
+  line(210,10,230,10);
+  line(210,30,230,30);
+  line(230,10,230,30);
+  line(210,10,210,30)
+  stroke(0)
+  strokeWeight(1)
+  
   time ++;
   depict = new Depict;
   if(time % 15 == 0){
@@ -141,19 +163,43 @@ function draw() {
 function mouseClicked(){
   QX = mouseX;
   QY = mouseY;
-  if(QX< 200 && QY < 40){
+  if(QX< 240 && QY < 40){
     if(QX <= 40)QM += 5;
     if(QX > 40 && QX < 80)QM -= 5;
-    if(QX > 80 && QX < 120)setup();
+    if(QX > 80 && QX < 120)W = 1;
     if(QX >= 120 && QX < 160)QM = 0;
     if(QX >= 160 && QX < 200){
       move = new Move;
       move.draw();
     }
+    if(QX >= 200 && QX < 240){
+      setup();
+    }
     console.log(QM)
   }else{
-    electron = new Electron;
-  E.push(electron);
-  QN ++;
+    if(W == 1){
+      let MINDIS = 1000000;
+      let CHA = -1;
+      for(let i = 0;i < QN;i ++){
+        let d = dist(E[i].x,E[i].y,QX,QY);
+        if(d < 6*sqrt(abs(E[i].q))){
+          if(MINDIS > d){
+            MINDIS = d;
+            CHA = i;
+          }
+        }
+      }
+      if(CHA != -1){
+        E[CHA] = E[QN-1];
+        QN --;
+      }
+    }else{
+      electron = new Electron;
+      E.push(electron);
+      QN ++;
+    E[QN-1] = electron;
+    }
+    W = 0;
   }
 }
+
