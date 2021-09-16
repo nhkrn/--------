@@ -1,3 +1,4 @@
+
 var QX = 0;
 var QY = 0;
 var QM = 0;
@@ -10,6 +11,8 @@ class Electron{
     this.q = QM;
     this.x = QX;
     this.y = QY;
+    this.vx = 0;
+    this.vy = 0;
   }
 }
 
@@ -72,17 +75,19 @@ class Move{
       for(let j = 0;j < QN;j ++){
         if(i == j)continue;
         let d = dist(E[i].x,E[i].y,E[j].x,E[j].y);
-        if(d < 100 && E[i].q*E[j].q < 0)d = 100;
+        if(d < 20 && E[i].q*E[j].q < 0)d = 20;
           ax += 20*E[j].q*(E[i].x-E[j].x)/(d*d*d);
           ay += 20*E[j].q*(E[i].y-E[j].y)/(d*d*d);
       }
       console.log(ay)
-      A.push(E[i].x+E[i].q*10*ax);
-      B.push(E[i].y+E[i].q*10*ay);
+      A.push(E[i].q*ax);
+      B.push(E[i].q*ay);
     }
     for(let i = 0;i < QN;i ++){
-      E[i].x = A[i];
-      E[i].y = B[i];
+      E[i].vx = E[i].vx+A[i]*10/abs(E[i].q);
+      E[i].vy = E[i].vy+B[i]*10/abs(E[i].q);
+      E[i].y += E[i].vy;
+      E[i].x += E[i].vx;
     }
   }
 }
