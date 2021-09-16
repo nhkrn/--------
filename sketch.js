@@ -198,6 +198,7 @@ function mouseClicked(){
       E.push(electron);
       QN ++;
     E[QN-1] = electron;
+      QM = 0;
     }
     W = 0;
   }
