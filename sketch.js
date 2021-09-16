@@ -124,7 +124,7 @@ function setup() {
   E = [];
   QM = 0;
   QN = 0;
-  createCanvas(1500, 4000);
+  createCanvas(5000, 3000);
   depict = new Depict;
 }
 
