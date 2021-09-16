@@ -2,6 +2,7 @@ var QX = 0;
 var QY = 0;
 var QM = 0;
 var QN = 0;
+var time = 0;
 let E = [];
 
 class Electron{
@@ -12,19 +13,20 @@ class Electron{
   }
 }
 
+
 class Depict{
   draw(){
   let pi = PI;
   let a = 5;
   background(255);
-
+    
   for(let k = 0;k < QN;k ++){
     for(let i = 0;i < abs(E[k].q);i ++){
       let px = E[k].x;
       let py = E[k].y;
-      let x = px + 15*cos(i*pi*2/abs(E[k].q));
-      let y = py+ 15*sin(i*pi*2/(abs(E[k].q)));
-      for(let j = 0;j < 700;j ++){
+      let x = px + 3*sqrt(abs(E[k].q))*cos(i*pi*2/abs(E[k].q));
+      let y = py+ 3*sqrt(abs(E[k].q))*sin(i*pi*2/(abs(E[k].q)));
+      for(let j = 0;j < 500;j ++){
         let ax = 0;
         let ay = 0;
         for(let s = 0;s < QN;s ++){
@@ -37,12 +39,15 @@ class Depict{
           a = -a;
         }
         line(x,y,x+a*cos(sita),y+a*sin(sita));
+        let b = (time/5)%10;
+        if(j%10==b && E[k].q > 0)circle(x,y,6);
+        if(j%10==9-b && E[k].q < 0)circle(x,y,6);
         px = x;
         py = y;
         x += a*cos(sita);
         y += a*sin(sita);
         for(let s = 0;s < QN;s ++){
-          if(dist(x,y,E[s].x,E[s].y) < 15)j = 61;
+          if(dist(x,y,E[s].x,E[s].y) < 3*sqrt(abs(E[k].q)))j = 701;
         }
       }
     }
@@ -50,10 +55,35 @@ class Depict{
   }
     for(let k = 0;k < QN;k ++){
       fill(250,0,100+150*E[k].q/abs(E[k].q));
-      circle(E[k].x,E[k].y,3*sqrt(abs(E[k].q)));
+      circle(E[k].x,E[k].y,6*sqrt(abs(E[k].q)));
     }
     fill(256)
-    rect(0,0,120,40)
+    rect(0,0,200,40)
+  }
+}
+
+class Move{
+  draw(){
+    let A = [];
+    let B = [];
+    for(let i = 0;i < QN;i ++){
+      let ax = 0;
+      let ay = 0;
+      for(let j = 0;j < QN;j ++){
+        if(i == j)continue;
+        let d = dist(E[i].x,E[i].y,E[j].x,E[j].y);
+        if(d < 100 && E[i].q*E[j].q < 0)d = 100;
+          ax += 20*E[j].q*(E[i].x-E[j].x)/(d*d*d);
+          ay += 20*E[j].q*(E[i].y-E[j].y)/(d*d*d);
+      }
+      console.log(ay)
+      A.push(E[i].x+E[i].q*10*ax);
+      B.push(E[i].y+E[i].q*10*ay);
+    }
+    for(let i = 0;i < QN;i ++){
+      E[i].x = A[i];
+      E[i].y = B[i];
+    }
   }
 }
 
@@ -72,21 +102,38 @@ function draw() {
   line(50,20,70,20);
   line(90,10,110,30);
   line(90,30,110,10);
+  line(135,10,135,30);
+  line(150,10,150,30);
+  line(135,10,150,10);
+  line(135,30,150,30);
+  line(135,15,150,25);
+  line(170,10,170,30);
+  line(170,10,190,20);
+  line(190,20,170,30);
+  time ++;
+  depict = new Depict;
+  if(time % 15 == 0){
+    depict.draw();
+  }
 }
 
 
 function mouseClicked(){
   QX = mouseX;
   QY = mouseY;
-  if(QX< 120 && QY < 40){
+  if(QX< 200 && QY < 40){
     if(QX <= 40)QM += 5;
     if(QX > 40 && QX < 80)QM -= 5;
-    if(QX > 80)setup();
+    if(QX > 80 && QX < 120)setup();
+    if(QX >= 120 && QX < 160)QM = 0;
+    if(QX >= 160 && QX < 200){
+      move = new Move;
+      move.draw();
+    }
     console.log(QM)
   }else{
     electron = new Electron;
   E.push(electron);
   QN ++;
-  depict.draw();
   }
 }
