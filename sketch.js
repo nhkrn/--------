@@ -29,7 +29,7 @@ class Depict{
       let py = E[k].y;
       let x = px + 3*sqrt(abs(E[k].q))*cos(i*pi*2/abs(E[k].q));
       let y = py+ 3*sqrt(abs(E[k].q))*sin(i*pi*2/(abs(E[k].q)));
-      for(let j = 0;j < 500;j ++){
+      for(let j = 0;j < 600;j ++){
         let ax = 0;
         let ay = 0;
         for(let s = 0;s < QN;s ++){
@@ -57,11 +57,26 @@ class Depict{
    
   }
     for(let k = 0;k < QN;k ++){
-      fill(250,0,100+150*E[k].q/abs(E[k].q));
+      fill(100-150*E[k].q/abs(E[k].q),0,100+150*E[k].q/abs(E[k].q));
       circle(E[k].x,E[k].y,6*sqrt(abs(E[k].q)));
+      let g = sqrt(abs(E[k].q));
+      fill(256);
+      strokeWeight(4);
+      stroke(255,255,255)
+      if(E[k].q < 0){
+        line(E[k].x+2*g,E[k].y,E[k].x-2*g,E[k].y);        
+      }
+      if(E[k].q > 0){
+        line(E[k].x,E[k].y+2*g,E[k].x,E[k].y-2*g);
+        line(E[k].x+2*g,E[k].y,E[k].x-2*g,E[k].y);
+      }
+      stroke(0,0,0)
+      strokeWeight(1)
     }
     fill(256)
     rect(0,0,200,40)
+
+
   }
 }
 
@@ -84,8 +99,8 @@ class Move{
       B.push(E[i].q*ay);
     }
     for(let i = 0;i < QN;i ++){
-      E[i].vx = E[i].vx+A[i]*10/abs(E[i].q);
-      E[i].vy = E[i].vy+B[i]*10/abs(E[i].q);
+      E[i].vx = E[i].vx+A[i]*7/abs(E[i].q);
+      E[i].vy = E[i].vy+B[i]*7/abs(E[i].q);
       E[i].y += E[i].vy;
       E[i].x += E[i].vx;
     }
