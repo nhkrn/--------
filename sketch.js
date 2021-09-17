@@ -49,6 +49,7 @@ class Depict{
         if(dist(x,y,px,py)> dist(x+a*cos(sita),y+a*sin(sita),px,py)){
           a = -a;
         }
+        stroke(128+5*V,0,128-5*V);
         line(x,y,x+a*cos(sita),y+a*sin(sita));
         let b = 1+(100000-time/15)%9;
         if((pV%10-b)*(V%10-b) < 0 &&  (pV%10-1)*(V%10-1) >= 0 && u == 0){
