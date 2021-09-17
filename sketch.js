@@ -51,11 +51,11 @@ class Depict{
         }
         stroke(128+5*V,0,128-5*V);
         line(x,y,x+a*cos(sita),y+a*sin(sita));
-        let b = 1+(100000-time/15)%9;
-        if((pV%10-b)*(V%10-b) < 0 &&  (pV%10-1)*(V%10-1) >= 0 && u == 0){
+        let b = (100000-time/30)%20;
+        if(E[s].q < 0 && V%20==19-b){
           circle(x,y,10);
         }
-        if(b == 1 && (pV%10-1)*(V%10-1) < 0 && u == 0 && pV%10 < 5 && V%10 < 5){
+        if(E[s].q > 0 && V%20==b){
           circle(x,y,10)
         }
         px = x;
