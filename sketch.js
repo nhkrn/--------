@@ -51,12 +51,13 @@ class Depict{
           a = -a;
         }
         let v = V-100000;
-        stroke(128-v*3/sqrt(abs(v)),64,128+v*3/sqrt(abs(v)))
-        strokeWeight(1.5)
+        let vv = v*3/sqrt(abs(v));
+        stroke(-13*vv,256-25*abs(vv),13*vv)
+        strokeWeight(1)
         line(x,y,x+a*cos(sita),y+a*sin(sita));
         stroke(0)
         let b = (100000-time/15)%10;
-        fill(128-v*3/sqrt(abs(v)),64,128+v*3/sqrt(abs(v)))
+        fill(-13*vv,256-25*abs(vv),+13*vv)
         if(int((pV-b)/10)*10+b>V || int((V-b)/10)*10+b > pV){
           if(u==0)circle(x,y,7);
         }
