@@ -2,6 +2,7 @@ var QX = 0;
 var QY = 0;
 var QM = 0;
 var QN = 0;
+var quality = 6;
 var time = 0;
 let E = [];
 var W = 0;
@@ -20,7 +21,7 @@ class Electron{
 class Depict{
   draw(){
   let pi = PI;
-  let a = 5;
+  let a =5;
   background(255);
     
   for(let k = 0;k < QN;k ++){
@@ -31,7 +32,7 @@ class Depict{
       let x = px + 3*sqrt(abs(E[k].q))*cos(i*pi*2/abs(E[k].q));
       let y = py+ 3*sqrt(abs(E[k].q))*sin(i*pi*2/(abs(E[k].q)));
       let V = 0;
-      for(let j = 0;j < 600;j ++){
+      for(let j = 0;j < 3000/quality;j ++){
         V = 100000;
         let u = 0;
         let ax = 0;
@@ -41,7 +42,7 @@ class Depict{
           ax += E[s].q*(x-E[s].x)/(d*d*d);
           ay += E[s].q*(y-E[s].y)/(d*d*d);
           V += 150*E[s].q/d;
-          if(d < 20*sqrt(abs(E[s].q))){
+          if(d < 10*sqrt(abs(E[s].q))){
             u = 1;
           }
         }
@@ -49,21 +50,24 @@ class Depict{
         if(dist(x,y,px,py)> dist(x+a*cos(sita),y+a*sin(sita),px,py)){
           a = -a;
         }
+        let v = V-100000;
+        stroke(128-v*4/sqrt(abs(v)),64,128+v*4/sqrt(abs(v)))
+        strokeWeight(1.5)
         line(x,y,x+a*cos(sita),y+a*sin(sita));
-        let b = 1+(100000-time/15)%9;
-        if((pV%10-b)*(V%10-b) < 0 &&  (pV%10-1)*(V%10-1) >= 0 && u == 0){
-          circle(x,y,10);
+        stroke(0)
+        let b = (100000-time/15)%10;
+        fill(128-v*10/sqrt(abs(v)),64,128+v*10/sqrt(abs(v)))
+        if(int((pV-b)/10)*10+b>V || int((V-b)/10)*10+b > pV){
+          if(u==0)circle(x,y,7);
         }
-        if(b == 1 && (pV%10-1)*(V%10-1) < 0 && u == 0 && pV%10 < 5 && V%10 < 5){
-          circle(x,y,10)
-        }
+        fill(256)
         px = x;
         py = y;
         pV = V;
         x += a*cos(sita);
         y += a*sin(sita);
         for(let s = 0;s < QN;s ++){
-          if(dist(x,y,E[s].x,E[s].y) < 3*sqrt(abs(E[k].q)))j = 701;
+          if(dist(x,y,E[s].x,E[s].y) < 3*sqrt(abs(E[k].q)))j = 100001;
         }
       }
     }
