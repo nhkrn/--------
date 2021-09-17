@@ -56,7 +56,7 @@ class Depict{
         line(x,y,x+a*cos(sita),y+a*sin(sita));
         stroke(0)
         let b = (100000-time/15)%10;
-        fill(128-v*10/sqrt(abs(v)),64,128+v*10/sqrt(abs(v)))
+        fill(128-v*2/sqrt(abs(v)),64,128+v*2/sqrt(abs(v)))
         if(int((pV-b)/10)*10+b>V || int((V-b)/10)*10+b > pV){
           if(u==0)circle(x,y,7);
         }
