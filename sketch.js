@@ -42,7 +42,7 @@ class Depict{
           ax += E[s].q*(x-E[s].x)/(d*d*d);
           ay += E[s].q*(y-E[s].y)/(d*d*d);
           V += 150*E[s].q/d;
-          if(d < 4*sqrt(abs(E[s].q))){
+          if(d < 5*sqrt(abs(E[s].q))){
             u = 1;
           }
         }
